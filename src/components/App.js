@@ -10,6 +10,7 @@ import Login from './Login';
 import Logout from './Logout';
 
 const App = () => {
+  const isLoggedIn = localStorage.getItem('token')
   return (
     <AppContainer>
       <LambdaHeader/>
@@ -21,12 +22,8 @@ const App = () => {
         <Route exact path="/login">
           <Login/>
         </Route> 
-        <Route exact path="/view">
-          <View/>
-        </Route>  
-        <Route exact path="/logout">
-          <Logout/>
-        </Route>        
+        <PrivateRoute exact path='/protected' component={View} />
+        <PrivateRoute exact path='/protected' component={Logout} />        
       </RouteContainer>
     </AppContainer>
   )
