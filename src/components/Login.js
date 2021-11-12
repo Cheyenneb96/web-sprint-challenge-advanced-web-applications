@@ -21,13 +21,13 @@ const Login = () => {
     const handleSubmit = (e) => {
         
         setIsLoading(true)
-        console.log('in submit')
+    
         e.preventDefault()
         axios.post(`http://localhost:5000/api/login`, formData)
         .then(resp=> {
           localStorage.setItem('token', resp.data.token);
           setIsLoading(false)
-          history.push('/protected');
+          history.push('/protected-view');
         })
         .catch(err=> {
           setIsLoading(false)
