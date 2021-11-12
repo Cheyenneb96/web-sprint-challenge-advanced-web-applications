@@ -25,9 +25,9 @@ const Login = () => {
         e.preventDefault()
         axios.post(`http://localhost:5000/api/login`, formData)
         .then(resp=> {
-          localStorage.setItem('token', resp.data.payload);
+          localStorage.setItem('token', resp.data.token);
           setIsLoading(false)
-          history.push('/view');
+          history.push('/protected');
         })
         .catch(err=> {
           setIsLoading(false)
