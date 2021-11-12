@@ -1,13 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-
+import { useHistory } from "react-router-dom";
+import axios from 'axios';
 const Login = () => {
+    const history = useHistory()
+    const [formData, setFormData] = useState({
+        username: '',
+        password: ''
+    })
+    const [isLoading, setIsLoading] = useState(false)
+    const [errorMsg, setErrorMsg] = useState('')
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const handleSubmit = (e) => {
+        
+        setIsLoading(true)
+        console.log('in submit')
+        e.preventDefault()
+        axios.post(`http://localhost:5000/api/login`, formData)
+        .then(resp=> {
+          localStorage.setItem('token', resp.data.payload);
+          setIsLoading(false)
+          history.push('/view');
+        })
+        .catch(err=> {
+          setIsLoading(false)
+          setErrorMsg(err.response.data.error.toString())
+          console.log(err.response.data.error);
+        })
+    }
     
     return(<ComponentContainer>
         <ModalContainer>
             <h1>Welcome to Blogger Pro</h1>
             <h2>Please enter your account information.</h2>
+            <FormGroup  onSubmit={handleSubmit}>
+               <Label>
+                    <Input 
+                      name= 'username'
+                      id="username" 
+                      type="text" 
+                      placeholder="username"
+                      onChange={handleChange}
+                       />
+               
+                    <Input 
+                      name= 'password'
+                      id="password" 
+                      type="password"
+                      placeholder="•••••••"
+                      onChange={handleChange} 
+                      />
+                </Label>
+                <div className="button">
+                    <input type="submit" id="submit" value="Log In" />
+                </div>
+            </FormGroup>
+            <p id="error">{errorMsg} </p>
         </ModalContainer>
+        
     </ComponentContainer>);
 }
 
